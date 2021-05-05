@@ -31,4 +31,12 @@ public class Account {
     public void setAccountPassword(String accountPassword) {
         this.accountPassword = accountPassword;
     }
+
+    @Override
+    public String toString() {
+        return "Thông tin tài khoản \n"+
+                "Tên đăng nhập: "+accountName+"\n"+
+                "Mật khẩu: "+accountPassword+"\n"+
+                "Email: "+accountEmail;
+    }
 }
