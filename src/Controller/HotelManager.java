@@ -5,6 +5,7 @@ import HotelService.MudBathService;
 import HotelService.Service;
 import Model.Account;
 import Model.Invoice;
+import Model.Renter;
 import Model.Room;
 
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ public class HotelManager {
     private Scanner scanner = new Scanner(System.in);
     private ArrayList<Room> listRoom = new ArrayList<>();
     private ArrayList<Invoice> listInvoice = new ArrayList<>();
+    private ArrayList<Renter> listRenter = new ArrayList<>();
+    private ArrayList<Service> listService = new ArrayList<>();
 
 
 
@@ -105,6 +108,151 @@ public class HotelManager {
             }
         });
     }
-    // thiết lập invoice
+                                        // thiết lập invoice
+
+
+//    private boolean checkRoomExist(String id){
+//        for (Room r: listRoom
+//        ) {
+//            if(r.getId().equals(id)){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//    private boolean checkRoomEmpty(String id){
+//        for (Room r: listRoom
+//             ) {
+//            if(r.isEmpty()){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+    private boolean addRoomToInvoice(Invoice invoice){
+        System.out.println("Mời nhập id phòng");
+        Boolean check = false;
+            String idRoom = scanner.nextLine();
+            for (int i = 0; i < listRoom.size(); i++) {
+                if(listRoom.get(i).getId().equals(idRoom)&&listRoom.get(i).isEmpty()){
+                    invoice.setRoom(listRoom.get(i));
+                    check = true;
+                }
+            }
+            if(!check){
+                System.err.println("Xin lỗi phòng không tồn tại hoặc đã có khách thuê");
+            }
+            return check;
+    }
+
+    // thiết lập tạo khách hàng
+    private String enterNameOfRenter(){
+        System.out.println("Mời nhập tên khách hàng");
+        String nameOfRenter = scanner.nextLine();
+        return nameOfRenter;
+    }
+    private String enterIDCardOfRenter(){
+        System.out.println("Mời nhập số chứng minh thư của khách hàng");
+        String IDCardOfRenter = scanner.nextLine();
+        return IDCardOfRenter;
+    }
+    private String enterNumberPhoneOfRenter(){
+        System.out.println("Mời nhập số điện thoại của khách hàng");
+        String numberPhoneOfRenter = scanner.nextLine();
+        return numberPhoneOfRenter;
+    }
+    private Renter createNewRenter(){
+        Renter renter = new Renter();
+        renter.setName(enterNameOfRenter());
+        renter.setIdCard(enterIDCardOfRenter());
+        renter.setPhoneNumber(enterNumberPhoneOfRenter());
+        return renter;
+    }
+    private void addRenterToInvoice(Invoice invoice){
+        System.out.println("Mời nhập số lượng khách thuê");
+        int renterNumber = Integer.parseInt(scanner.nextLine());
+        ArrayList<Renter> renters = new ArrayList<>();
+        for (int i = 0; i < renterNumber; i++) {
+            Renter renter = createNewRenter();
+            renters.add(renter);
+        }
+        invoice.setRenters(renters);
+        listRenter.addAll(renters);
+
+    }
+    public void createNewInvoice(){
+        Invoice invoice = new Invoice();
+        if(addRoomToInvoice(invoice)){
+            addRenterToInvoice(invoice);
+            int id = (listInvoice.size()==0)?1:listInvoice.get(listInvoice.size()-1).getId()+1;
+            invoice.setId(id);
+            invoice.getRoom().setEmpty(false);
+            listInvoice.add(invoice);
+        }
+    }
+
+    // hiển thị tất cả hoá đơn
+    public void showAllInvoice(){
+        for (Invoice invoice:listInvoice
+             ) {
+            System.out.println(invoice.getInformation());
+        }
+    }
+    //menu hoá đơn
+    public Invoice getInvoiceById(){
+
+        System.out.println("Mời nhập id của hoá đơn");
+        int idOfInvoice = Integer.parseInt(scanner.nextLine());
+
+        for (Invoice invoice: listInvoice
+             ) {
+            if(invoice.getId()==idOfInvoice){
+                return invoice;
+            }
+        }
+        System.err.println("Xin lỗi hoá đơn không tồn tại");
+        return null;
+    }
+
+    public void showInvoice(Invoice invoice){
+        System.out.println(invoice.getInformation());
+    }
+    public void payInvoice(Invoice invoice){
+        System.out.println(invoice.getRoom().getPrice());
+        invoice.setPaid(true);
+        invoice.getRoom().setEmpty(true);
+    }
+    public void invoiceMenu(){
+        Invoice invoice;
+        if ((invoice = getInvoiceById()) != null) {
+            String choose;
+            do {
+                System.out.println("1.Xem thông tin hoá đơn");
+                System.out.println("2.Thanh toán hoá đơn");
+                System.out.println("3.Chỉnh sửa hoá đơn");
+                System.out.println("4.Thoát");
+                choose= scanner.nextLine();
+                switch (choose){
+                    case "1":
+                        showInvoice(invoice);
+                        break;
+                    case "2":
+                        payInvoice(invoice);
+                        break;
+                    case "3":
+                        break;
+                    case "4":
+                        break;
+                    default:
+                        System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
+                        break;
+                }
+            }while (!choose.equals("4"));
+
+        }
+        else {
+            System.err.println("Hoá đơn không tồn tại");
+        }
+    }
 
 }

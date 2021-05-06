@@ -3,6 +3,7 @@ package Views;
 import Controller.AccountManager;
 import Controller.HotelManager;
 import Model.Account;
+import Model.Renter;
 import Model.Room;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class Client {
     static final HotelManager hotelManager = HotelManager.getINSTANCE();
     public static void main(String[] args) {
        loginMenu();
+
 
 
 
@@ -61,8 +63,9 @@ public class Client {
             System.out.println("3.Xem danh sách các phòng còn trống theo giá");
             System.out.println("4.Xem danh sách tất cả các phòng");
             System.out.println("5.Cho khách thuê phòng/Tạo hoá đơn mới");
-            System.out.println("6.Xem thông tin hoá đơn");
-            System.out.println("7.Thoát ra ngoài");
+            System.out.println("6.Xem thông tin tất cả hoá đơn");
+            System.out.println("7.Thiết lập hoá đơn theo id");
+            System.out.println("8.Thoát ra ngoài");
             choose = scanner.nextLine();
             switch (choose){
                 case "1":
@@ -78,8 +81,18 @@ public class Client {
                 case "4":
                     hotelManager.showAllRoom();
                     break;
+                case "5":
+                    hotelManager.createNewInvoice();
+                    break;
+                case "6":
+                    hotelManager.showAllInvoice();
+                    break;
+                case "7":
+                    hotelManager.invoiceMenu();
+                    break;
+
             }
-        }while (!choose.equals("7"));
+        }while (!choose.equals("8"));
     }
     static void accountMenu(){
         Scanner scanner = new Scanner(System.in);
