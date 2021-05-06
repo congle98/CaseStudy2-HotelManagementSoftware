@@ -60,12 +60,13 @@ public class Client {
         do {
             System.out.println("1.Xem thông tin tài khoản");
             System.out.println("2.Thêm phòng mới");
-            System.out.println("3.Xem danh sách các phòng còn trống theo giá");
-            System.out.println("4.Xem danh sách tất cả các phòng");
-            System.out.println("5.Cho khách thuê phòng/Tạo hoá đơn mới");
-            System.out.println("6.Xem thông tin tất cả hoá đơn");
-            System.out.println("7.Thiết lập hoá đơn theo id");
-            System.out.println("8.Thoát ra ngoài");
+            System.out.println("3.Thiết lập phòng theo id");
+            System.out.println("4.Xem danh sách các phòng còn trống theo giá");
+            System.out.println("5.Xem danh sách tất cả các phòng");
+            System.out.println("6.Cho khách thuê phòng/Tạo hoá đơn mới");
+            System.out.println("7.Xem thông tin tất cả hoá đơn");
+            System.out.println("8.Thiết lập hoá đơn theo id");
+            System.out.println("9.Thoát ra ngoài");
             choose = scanner.nextLine();
             switch (choose){
                 case "1":
@@ -76,23 +77,26 @@ public class Client {
                     hotelManager.createNewRoom();
                     break;
                 case "3":
-                    hotelManager.showRoomsEmptyByPrice();
+                    hotelManager.roomMenu();
                     break;
                 case "4":
-                    hotelManager.showAllRoom();
+                    hotelManager.showRoomsEmptyByPrice();
                     break;
                 case "5":
-                    hotelManager.createNewInvoice();
+                    hotelManager.showAllRoom();
                     break;
                 case "6":
-                    hotelManager.showAllInvoice();
+                    hotelManager.createNewInvoice();
                     break;
                 case "7":
+                    hotelManager.showAllInvoice();
+                    break;
+                case "8":
                     hotelManager.invoiceMenu();
                     break;
 
             }
-        }while (!choose.equals("8"));
+        }while (!choose.equals("9"));
     }
     static void accountMenu(){
         Scanner scanner = new Scanner(System.in);

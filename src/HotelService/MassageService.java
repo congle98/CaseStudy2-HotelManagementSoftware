@@ -1,6 +1,14 @@
 package HotelService;
 
 public class MassageService implements Service{
+    private static MassageService INSTANCE;
+    private MassageService(){
+
+    }
+    public static MassageService getINSTANCE(){
+        if(INSTANCE==null) INSTANCE = new MassageService();
+        return INSTANCE;
+    }
 
     @Override
     public String getDescribe() {
