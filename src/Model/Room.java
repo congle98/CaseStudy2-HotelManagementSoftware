@@ -9,10 +9,10 @@ public class Room {
         this.empty = true;
     }
 
-    public Room(String id, Double price) {
+    public Room(String id, Double price, boolean empty) {
         this.id = id;
         this.price = price;
-        this.empty = true;
+        this.empty = empty;
     }
 
     public String getId() {
@@ -37,5 +37,14 @@ public class Room {
 
     public void setEmpty(boolean empty) {
         this.empty = empty;
+    }
+
+    @Override
+    public String toString() {
+        String empty = isEmpty()?" Phòng còn trống":" Phòng đã có người thuê";
+        return "Phòng" +
+                " id: " + id +
+                " giá: " + price +
+                empty;
     }
 }

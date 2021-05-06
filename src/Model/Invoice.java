@@ -1,15 +1,17 @@
 package Model;
 
+import HotelService.Service;
+
 import java.time.LocalDate;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Invoice {
     private int id ;
     private Room room;
-    private List<Renter> renters;
+    private ArrayList<Renter> renters;
     private LocalDate DayStart;
     private LocalDate DayEnd;
-    private List<Service> services;
+    private ArrayList<Service> services;
 
 
     public int getId() {
@@ -28,11 +30,11 @@ public class Invoice {
         this.room = room;
     }
 
-    public List<Renter> getRenters() {
+    public ArrayList<Renter> getRenters() {
         return renters;
     }
 
-    public void setRenters(List<Renter> renters) {
+    public void setRenters(ArrayList<Renter> renters) {
         this.renters = renters;
     }
 
@@ -52,11 +54,11 @@ public class Invoice {
         DayEnd = dayEnd;
     }
 
-    public List<Service> getServices() {
+    public ArrayList<Service> getServices() {
         return services;
     }
 
-    public void setServices(List<Service> services) {
+    public void setServices(ArrayList<Service> services) {
         this.services = services;
     }
 }

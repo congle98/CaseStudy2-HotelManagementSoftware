@@ -3,13 +3,20 @@ package Views;
 import Controller.AccountManager;
 import Controller.HotelManager;
 import Model.Account;
+import Model.Room;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 public class Client {
     static final AccountManager accountManager = AccountManager.getINSTANCE();
     static final HotelManager hotelManager = HotelManager.getINSTANCE();
     public static void main(String[] args) {
        loginMenu();
+
+
+
 
 
 
@@ -51,8 +58,8 @@ public class Client {
         do {
             System.out.println("1.Xem thông tin tài khoản");
             System.out.println("2.Thêm phòng mới");
-            System.out.println("3.Xem danh sách các phòng còn trống");
-            System.out.println("4.Xem danh sách các phòng đã có người thuê");
+            System.out.println("3.Xem danh sách các phòng còn trống theo giá");
+            System.out.println("4.Xem danh sách tất cả các phòng");
             System.out.println("5.Cho khách thuê phòng/Tạo hoá đơn mới");
             System.out.println("6.Xem thông tin hoá đơn");
             System.out.println("7.Thoát ra ngoài");
@@ -63,15 +70,36 @@ public class Client {
                     accountMenu();
                     break;
                 case "2":
+                    hotelManager.createNewRoom();
                     break;
                 case "3":
+                    hotelManager.showRoomsEmptyByPrice();
                     break;
                 case "4":
+                    hotelManager.showAllRoom();
                     break;
             }
         }while (!choose.equals("7"));
     }
     static void accountMenu(){
+        Scanner scanner = new Scanner(System.in);
+        String choose;
+        do {
+            System.out.println("1.Thay đổi mật khẩu");
+            System.out.println("2.Thay đổi email");
+            System.out.println("3.Thoát ra ngoài");
+            choose = scanner.nextLine();
+            switch (choose){
+                case "1":
+                    break;
+                case "2":
+                    break;
+                case "3":
+                    break;
+                default:
+                    System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
 
+            }
+        }while (!choose.equals("3"));
     }
 }
