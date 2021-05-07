@@ -12,6 +12,7 @@ public class Invoice {
     private LocalDate DayStart;
     private LocalDate DayEnd;
     private ArrayList<Service> services = new ArrayList<>();
+    private double price;
     private Boolean paid;
 
 
@@ -33,6 +34,14 @@ public class Invoice {
 
     public void setPaid(Boolean paid) {
         this.paid = paid;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public Room getRoom() {
@@ -77,6 +86,13 @@ public class Invoice {
     public String getInformation(){
         String renterInfor = "";
         String serviceInfor = "";
+        String price ="";
+        if(getPrice()==0){
+            price = "Chưa thanh toán";
+        }
+        else {
+            price += getPrice()+"vnđ" ;
+        }
         for (int i = 0; i < renters.size(); i++) {
 //            if(i<renters.size()-1){
                 renterInfor+=i+1+"."+renters.get(i).getName()+", số điện thoại: "+renters.get(i).getPhoneNumber()+", số CMT: "+ renters.get(i).getIdCard()+" .\n" ;
@@ -92,7 +108,9 @@ public class Invoice {
         return "Hoá đơn số: "+id+" Loại: "+ checkPaid+
                 "\nPhòng ID: "+room.getId()+
                 "\nKhách: \n"+renterInfor+
-                "Dịch vụ: \n"+serviceInfor;
+                "\nDịch vụ: \n"+serviceInfor+
+                "\nTổng tiền: "+price+
+                "\n-------------------------------------------------";
 
     }
 }

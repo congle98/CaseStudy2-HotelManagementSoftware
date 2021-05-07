@@ -41,10 +41,10 @@ public class Room {
 
     @Override
     public String toString() {
-        String empty = isEmpty()?" Phòng còn trống":" Phòng đã có người thuê";
+        String empty = isEmpty()?", Phòng còn trống":", Phòng đã có người thuê";
         return "Phòng" +
                 " id: " + id +
-                " giá: " + price +
-                empty;
+                ", giá: " + price +"vnđ"+
+                empty+"\n";
     }
 }

@@ -8,10 +8,13 @@ import Model.Invoice;
 import Model.Renter;
 import Model.Room;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class HotelManager {
     private static  HotelManager INSTANCE;
@@ -19,6 +22,21 @@ public class HotelManager {
     private ArrayList<Room> listRoom = new ArrayList<>();
     private ArrayList<Invoice> listInvoice = new ArrayList<>();
     private ArrayList<Renter> listRenter = new ArrayList<>();
+    private Double revenue=0.0;
+    private Double revenueJanuary;
+    private Double revenueFebruary;
+    private Double revenueMarch;
+    private Double revenueApril;
+    private Double revenueMay;
+    private Double revenueJune;
+    private Double revenueJuly;
+    private Double revenueAugust;
+    private Double revenueSeptember;
+    private Double revenueOctober;
+    private Double revenueNovember;
+    private Double revenueDecember;
+    private String successNotify = "Thiết lập thành công";
+    private String errorInputOption = "---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------";
 //    private ArrayList<Service> listService = new ArrayList<>();
 
 
@@ -149,7 +167,7 @@ public class HotelManager {
                     case "4":
                         break;
                     default:
-                        System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
+                        System.err.println(errorInputOption);
                         break;
                 }
             } while (!choose.equals("3")&&!choose.equals("4"));
@@ -203,7 +221,7 @@ public class HotelManager {
                 case "3":
                     break;
                 default:
-                    System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
+                    System.err.println(errorInputOption);
                     break;
             }
         }while ((!choose.equals("3")));
@@ -263,11 +281,26 @@ public class HotelManager {
         listRenter.addAll(renters);
 
     }
+    private void addDayStartToInvoice(Invoice invoice){
+        System.err.println("Mời nhập thời gian bắt đầu cho thuê theo định dạng dd/mm/yyyy");
+        String dayStart = scanner.nextLine();
+        String time[] = dayStart.split("/");
+        LocalDate dateTime = LocalDate.of(Integer.parseInt(time[2]),Integer.parseInt(time[1]),Integer.parseInt(time[0]));
+        invoice.setDayStart(dateTime);
+    }
+//    private void addDayEndToInvoice(Invoice invoice){
+//        System.err.println("Mời nhập ngày tháng năm kết thúc cho thuê theo định dạng dd/mm/yyyy");
+//        String dayStart = scanner.nextLine();
+//        String time[] = dayStart.split("/");
+//        LocalDate dateTime = LocalDate.of(Integer.parseInt(time[2]),Integer.parseInt(time[1]),Integer.parseInt(time[0]));
+//        invoice.setDayStart(dateTime);
+//    }
     //tạo mới một hoá đơn
     public void createNewInvoice(){
         Invoice invoice = new Invoice();
         if(addRoomToInvoice(invoice)){
             addRenterToInvoice(invoice);
+            addDayStartToInvoice(invoice);
             int id = (listInvoice.size()==0)?1:listInvoice.get(listInvoice.size()-1).getId()+1;
             invoice.setId(id);
             invoice.getRoom().setEmpty(false);
@@ -276,14 +309,14 @@ public class HotelManager {
     }
 
     // hiển thị tất cả hoá đơn
+
     public void showAllInvoice(){
         if(listRoom.size()==0){
             System.err.println("Chưa có hoá đơn nào");
         }
         else {
-            for (Invoice invoice:listInvoice
-            ) {
-                System.out.println(invoice.getInformation());
+            for (int i = 0; i < listInvoice.size(); i++) {
+                showInvoice(listInvoice.get(i));
             }
         }
     }
@@ -328,22 +361,94 @@ public class HotelManager {
                     case "4":
                         break;
                     default:
-                        System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
+                        System.err.println(errorInputOption);
                         break;
                 }
-            }while (!choose.equals("4")&&!choose.equals("2"));
+            }while (!choose.equals("4"));
         }
     }
     // thiển thị hoá đơn
-    public void showInvoice(Invoice invoice){
-        System.out.println(invoice.getInformation());
+    private String formatDate(LocalDate localDate){
+        if( localDate!=null){
+            String date = String.valueOf(localDate);
+            String []temp = date.split("-");
+            date = temp[2]+"/"+temp[1]+"/"+temp[0];
+            return date;
+        }
+        else {
+            return "Chưa có dữ liệu";
+        }
     }
+    public void showInvoice(Invoice invoice) {
+        String renterInfor = "";
+        String serviceInfor = "";
+        String price = "";
+        if (invoice.getPrice() == 0) {
+            price = "Chưa thanh toán";
+        } else {
+            price += invoice.getPrice() + "vnđ";
+        }
+        for (int i = 0; i < invoice.getRenters().size(); i++) {
+            renterInfor += i + 1 + "." + invoice.getRenters().get(i).getName() + ", số điện thoại: " + invoice.getRenters().get(i).getPhoneNumber() + ", số CMT: " + invoice.getRenters().get(i).getIdCard() + " .\n";
+
+        }
+        for (int i = 0; i < invoice.getServices().size(); i++) {
+            serviceInfor += i + 1 + "." + invoice.getServices().get(i).getDescribe() + "\n";
+        }
+        String checkPaid = invoice.getPaid() ? " Đã thanh toán" : " Chưa thanh toán";
+        String infor = "--------------Hoá đơn số: "+invoice.getId()+" Loại: "+ checkPaid+
+                "--------------\nPhòng ID: "+invoice.getRoom().getId()+
+                "\nKhách: \n"+renterInfor+
+                "\nDịch vụ: \n"+serviceInfor+
+                "\nTổng tiền: "+price+
+                "\nNgày nhận phòng "+formatDate(invoice.getDayStart())+" Ngày trả phòng "+ formatDate(invoice.getDayEnd())+
+                "\n-------------------------------------------------";
+        if(invoice.getPaid()){
+            System.err.println(infor);
+        }
+        else {
+            System.out.println(infor);
+        }
+
+    }
+
+    //nhập ngày kết thúc hoá đơn
+    private void addDayEndToInvoice(Invoice invoice){
+        do {
+            System.err.println("Mời nhập ngày kết thúc hoá đơn theo định dạng dd/mm/yyyy");
+            String dayEnd = scanner.nextLine();
+            String time[] = dayEnd.split("/");
+            LocalDate dateTime = LocalDate.of(Integer.parseInt(time[2]),Integer.parseInt(time[1]),Integer.parseInt(time[0]));
+            if(DAYS.between(invoice.getDayStart(), dateTime)>0){
+                invoice.setDayEnd(dateTime);
+                break;
+            }
+            else {
+                System.err.println("Ngày kết thúc hoá đơn phải lớn hơn ngày bắt đầu !!!");
+            }
+        }while (true);
+
+    }
+    //
+    private void setPriceToInvoice(Invoice invoice){
+        long dayToRent = DAYS.between(invoice.getDayStart(),invoice.getDayEnd());
+        double priceService = 0;
+        for (int i = 0; i < invoice.getServices().size(); i++) {
+            priceService+=invoice.getServices().get(i).getPrice();
+        }
+        double price = dayToRent*invoice.getRoom().getPrice()+priceService;
+        invoice.setPrice(price);
+        revenue+=price;
+    }
+
     //thanh toán hoá đơn
     public void payInvoice(Invoice invoice){
         if (!invoice.getPaid()){
+            addDayEndToInvoice(invoice);
+            setPriceToInvoice(invoice);
             invoice.setPaid(true);
             invoice.getRoom().setEmpty(true);
-            System.out.println("hoá đơn đã được thanh toán, cảm ơn quý khách");
+            System.err.println("Hoá đơn ID:"+invoice.getId()+ " đã được thanh toán, số tiền là " +invoice.getPrice()+"vnđ , cảm ơn quý khách!");
         }
         else {
             System.err.println("xin lỗi hoá đơn này đã được thanh toán không thể thanh toán lại ");
@@ -351,29 +456,34 @@ public class HotelManager {
     }
     public void settingInvoiceMenu(Invoice invoice){
         String choose;
-        do {
-            System.out.println("1.Thay đổi phòng");
-            System.out.println("2.Thay đổi thông tin khách hàng");
-            System.out.println("3.Quản lý dịch vụ");
-            System.out.println("4.Thoát");
-            choose= scanner.nextLine();
-            switch (choose){
-                case "1":
-                    changeRoomInInvoice(invoice);
-                    break;
-                case "2":
-                    setRenterMenu(invoice);
-                    break;
-                case "3":
-                    setSeviceMenu(invoice);
-                    break;
-                case "4":
-                    break;
-                default:
-                    System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
-                    break;
-            }
-        }while (!choose.equals("4"));
+        if(!invoice.getPaid()){
+            do {
+                System.out.println("1.Thay đổi phòng");
+                System.out.println("2.Thay đổi thông tin khách hàng");
+                System.out.println("3.Quản lý dịch vụ");
+                System.out.println("4.Thoát");
+                choose= scanner.nextLine();
+                switch (choose){
+                    case "1":
+                        changeRoomInInvoice(invoice);
+                        break;
+                    case "2":
+                        setRenterMenu(invoice);
+                        break;
+                    case "3":
+                        setSeviceMenu(invoice);
+                        break;
+                    case "4":
+                        break;
+                    default:
+                        System.err.println(errorInputOption);
+                        break;
+                }
+            }while (!choose.equals("4"));
+        }
+        else {
+            System.err.println("Xin lỗi không thể sửa hoá đơn đã thanh toán");
+        }
     }
     private void changeRoomInInvoice(Invoice invoice){
         System.out.println("Mời nhập id phòng muốn chuyển");
@@ -416,7 +526,7 @@ public class HotelManager {
                     case "4":
                         break;
                     default:
-                        System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
+                        System.err.println(errorInputOption);
                         break;
                 }
             }
@@ -439,16 +549,19 @@ public class HotelManager {
         System.out.println("Mời nhập tên mới");
         String nameOfRenter = scanner.nextLine();
         renter.setName(nameOfRenter);
+        System.err.println(successNotify);
     }
     private void setPhoneOfRenter(Renter renter){
         System.out.println("Mời nhập số điện thoại mới");
         String numberOfRenter = scanner.nextLine();
         renter.setPhoneNumber(numberOfRenter);
+        System.err.println(successNotify);
     }
     private void setIdCardOfRenter(Renter renter){
         System.out.println("Mời nhập email mới");
         String idCardOfRenter = scanner.nextLine();
         renter.setIdCard(idCardOfRenter);
+        System.err.println(successNotify);
     }
 
 
@@ -469,7 +582,7 @@ public class HotelManager {
                 case "3":
                     break;
                 default:
-                    System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
+                    System.err.println(errorInputOption);
                     break;
             }
         }while (!choose.equals("3"));
@@ -491,7 +604,7 @@ public class HotelManager {
                 case "3":
                     break;
                 default:
-                    System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
+                    System.err.println(errorInputOption);
                     break;
             }
         }while (!choose.equals("3"));
@@ -502,7 +615,7 @@ public class HotelManager {
             int index = Integer.parseInt(scanner.nextLine());
             if(index<=invoice.getServices().size()){
                 invoice.getServices().remove(index-1);
-                System.out.println("Đã xoá dịch vụ thành công");
+                System.err.println("Đã xoá dịch vụ thành công");
             }
             else {
                 System.err.println("Nhập sai vị trí dịch vụ");
@@ -517,6 +630,13 @@ public class HotelManager {
     private void addService(Invoice invoice, Service service){
         ArrayList<Service> services = invoice.getServices();
         services.add(service);
+        System.err.println(successNotify);
     }
+
+    public void showRevenueMenu(){
+        System.err.println("Tổng doanh thu: "+revenue+"vnđ");
+    }
+
+
 
 }

@@ -25,13 +25,23 @@ public class Client {
 
     }
 
+
+
+
+
+
+
+
+
+
     static void loginMenu() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Chào mừng bạn đến với khách sạn Thành Công");
+        System.out.println("-----------------Chào mừng bạn đến với khách sạn Thành Công-----------------");
         while (true){
             System.out.println("1.Đăng nhập");
             System.out.println("2.Đăng ký");
-            System.out.println("3.Thoát phần mềm");
+            System.out.println("3.Lấy lại mật khẩu");
+            System.out.println("4.Thoát phần mềm");
             String choose = scanner.nextLine();
             switch (choose) {
                 case "1":
@@ -39,6 +49,7 @@ public class Client {
                         System.err.println("Đăng nhập thất bại, tài khoản hoặc mật khẩu không tồn tại!!");
                     }
                     else {
+                        System.err.println("Đăng nhập thành công !! mời tuỳ chọn các chức năng");
                         mainMenu();
                     }
                     break;
@@ -46,6 +57,9 @@ public class Client {
                     accountManager.createNewAccount();
                     break;
                 case "3":
+                    accountManager.passwordRetrieval();
+                    break;
+                case "4":
                     System.exit(0);
                     break;
                 default:
@@ -66,12 +80,13 @@ public class Client {
             System.out.println("6.Cho khách thuê phòng/Tạo hoá đơn mới");
             System.out.println("7.Xem thông tin tất cả hoá đơn");
             System.out.println("8.Thiết lập hoá đơn theo id");
-            System.out.println("9.Thoát ra ngoài");
+            System.out.println("9.Xem tổng doanh thu");
+            System.out.println("10.Thoát ra ngoài");
             choose = scanner.nextLine();
             switch (choose){
                 case "1":
-                    System.out.println(accountManager.getAccountInformation());
-                    accountMenu();
+                    System.err.println(accountManager.getAccountInformation());
+                    accountManager.accountMenu();
                     break;
                 case "2":
                     hotelManager.createNewRoom();
@@ -94,29 +109,9 @@ public class Client {
                 case "8":
                     hotelManager.invoiceMenu();
                     break;
-
+                case "9":
+                    hotelManager.showRevenueMenu();
             }
-        }while (!choose.equals("9"));
-    }
-    static void accountMenu(){
-        Scanner scanner = new Scanner(System.in);
-        String choose;
-        do {
-            System.out.println("1.Thay đổi mật khẩu");
-            System.out.println("2.Thay đổi email");
-            System.out.println("3.Thoát ra ngoài");
-            choose = scanner.nextLine();
-            switch (choose){
-                case "1":
-                    break;
-                case "2":
-                    break;
-                case "3":
-                    break;
-                default:
-                    System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
-
-            }
-        }while (!choose.equals("3"));
+        }while (!choose.equals("10"));
     }
 }
