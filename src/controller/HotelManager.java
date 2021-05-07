@@ -23,7 +23,6 @@ public class HotelManager {
     private ArrayList<Room> listRoom =  textFileFactory.readerFile("listRoom.txt");
     private ArrayList<Invoice> listInvoice = textFileFactory.readerFile("listInvoice.txt");
     private ArrayList<Renter> listRenter = textFileFactory.readerFile("listRenter.txt");;
-    private Double revenue=0.0;
     private String successNotify = "Thiết lập thành công";
     private String errorInputOption = "---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------";
 //    private ArrayList<Service> listService = new ArrayList<>();
@@ -91,14 +90,34 @@ public class HotelManager {
         return roomsEmpty;
     }
     public void showRoomsEmptyByPrice(){
-        System.out.println(roomsEmpty());
+        ArrayList<Room> rooms = roomsEmpty();
+        if(rooms.size()==0){
+            System.err.println("xin lỗi không có phòng trống trong khoảng giá này");
+        }
+        else {
+            for (Room r:rooms
+                 ) {
+                showRoom(r);
+            }
+        }
     }
 
     //hiển thị tất cả các phòng
     public void showAllRoom(){
 
-        System.out.println(listRoom);
+        if(listRoom.size()==0){
+            System.err.println("Chưa có phòng nào");
+        }
+        else {
+            for (Room r:listRoom
+                 ) {
+                showRoom(r);
+                System.out.println("--------------------------------");
+            }
+        }
+
     }
+
 
     //sắp xếp theo giá
     private void sortByPrice(ArrayList<Room> rooms){
@@ -165,7 +184,14 @@ public class HotelManager {
         }
     }
     private void showRoom(Room room){
-        System.out.println(room);
+        String empty = room.isEmpty()?", Còn trống":", Đã có người thuê";
+        String show =  "Phòng ID: "+room.getId()+" ,Giá: "+room.getPrice()+" vnđ"+ empty;
+        if(room.isEmpty()){
+            System.out.println(show);
+        }
+        else {
+            System.err.println(show);
+        }
     }
     private void setIdRoom(Room room){
         System.out.println("Mời nhập id mới của phòng");
@@ -309,7 +335,7 @@ public class HotelManager {
     // hiển thị tất cả hoá đơn
 
     public void showAllInvoice(){
-        if(listRoom.size()==0){
+        if(listInvoice.size()==0){
             System.err.println("Chưa có hoá đơn nào");
         }
         else {
@@ -399,7 +425,7 @@ public class HotelManager {
                 "\nKhách: \n"+renterInfor+
                 "\nDịch vụ: \n"+serviceInfor+
                 "\nTổng tiền: "+price+
-                "\nNgày nhận phòng "+formatDate(invoice.getDayStart())+" Ngày trả phòng "+ formatDate(invoice.getDayEnd())+
+                "\nNgày nhận phòng: "+formatDate(invoice.getDayStart())+", Ngày trả phòng: "+ formatDate(invoice.getDayEnd())+
                 "\n-------------------------------------------------";
         if(invoice.getPaid()){
             System.err.println(infor);
@@ -436,7 +462,7 @@ public class HotelManager {
         }
         double price = dayToRent*invoice.getRoom().getPrice()+priceService;
         invoice.setPrice(price);
-        revenue+=price;
+//        revenue+=price;
     }
 
     //thanh toán hoá đơn
@@ -496,6 +522,7 @@ public class HotelManager {
                 invoice.getRoom().setEmpty(false);
                 check = true;
                 saveInvoiceList();
+                System.out.println(successNotify);
             }
         }
         if(!check){
@@ -644,7 +671,57 @@ public class HotelManager {
     }
 
     public void showRevenueMenu(){
-        System.err.println("Tổng doanh thu: "+revenue+"vnđ");
+        Double totalRevenue = 0.0;
+        Double []revenue = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+        for (Invoice invoice:listInvoice
+        ) {
+            totalRevenue+=invoice.getPrice();
+            if(invoice.getDayEnd()!=null){
+                switch (invoice.getDayEnd().getMonthValue()){
+                    case 1:
+                        revenue[0]+=invoice.getPrice();
+                        break;
+                    case 2:
+                        revenue[1]+=invoice.getPrice();
+                        break;
+                    case 3:
+                        revenue[2]+=invoice.getPrice();
+                        break;
+                    case 4:
+                        revenue[3]+=invoice.getPrice();
+                        break;
+                    case 5:
+                        revenue[4]+=invoice.getPrice();
+                        break;
+                    case 6:
+                        revenue[5]+=invoice.getPrice();
+                        break;
+                    case 7:
+                        revenue[6]+=invoice.getPrice();
+                        break;
+                    case 8:
+                        revenue[7]+=invoice.getPrice();
+                        break;
+                    case 9:
+                        revenue[8]+=invoice.getPrice();
+                        break;
+                    case 10:
+                        revenue[9]+=invoice.getPrice();
+                        break;
+                    case 11:
+                        revenue[10]+=invoice.getPrice();
+                        break;
+                    case 12:
+                        revenue[11]+=invoice.getPrice();
+                        break;
+                }
+            }
+        }
+        System.err.println("-----------------BẢNG DOANH THU THEO THÁNG-------------------");
+        for (int i = 1; i <13 ; i++) {
+            System.out.println("Tháng "+i+" doanh thu là: "+revenue[i-1]+"vnđ");
+        }
+        System.out.println("-------------Tổng doanh thu: "+totalRevenue+"vnđ-------------");
     }
     private void saveInvoiceList(){
        textFileFactory.saveFile(listInvoice,"listInvoice.txt");

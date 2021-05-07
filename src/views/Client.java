@@ -74,7 +74,7 @@ public class Client {
             System.out.println("6.Cho khách thuê phòng/Tạo hoá đơn mới");
             System.out.println("7.Xem thông tin tất cả hoá đơn");
             System.out.println("8.Thiết lập hoá đơn theo id");
-            System.out.println("9.Xem tổng doanh thu");
+            System.out.println("9.Xem doanh thu");
             System.out.println("0.Thoát ra ngoài");
             System.out.println("11.Thiết lập lại toàn bộ dữ liệu quản lý");
             choose = scanner.nextLine();
