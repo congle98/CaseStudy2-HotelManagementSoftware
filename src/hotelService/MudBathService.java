@@ -1,4 +1,6 @@
-package HotelService;
+package hotelService;
+
+import java.io.Serializable;
 
 public class MudBathService implements Service{
     private static MudBathService INSTANCE;

@@ -1,8 +1,4 @@
-package Controller;
-
-import HotelService.Service;
-
-import java.util.ArrayList;
+package controller;
 
 //public class ServiceManager {
 //    private static  ServiceManager INSTANCE;

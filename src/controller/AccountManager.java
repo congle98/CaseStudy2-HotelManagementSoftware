@@ -1,14 +1,16 @@
-package Controller;
+package controller;
 
-import Model.Account;
+import model.Account;
+import storage.TextFileFactory;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AccountManager {
     private static Scanner scanner = new Scanner(System.in);
+    private TextFileFactory textFileFactory = TextFileFactory.getINSTANCE();
     private Account account;
-    private  ArrayList<Account> listAccount = new ArrayList<>();
+    private  ArrayList<Account> listAccount = textFileFactory.readerFile("account.txt");
     private static AccountManager INSTANCE;
 
     private AccountManager(){
@@ -66,6 +68,7 @@ public class AccountManager {
                 account.setAccountName(accountName);
                 account.setAccountEmail(accountEmail);
                 listAccount.add(account);
+                saveAccount();
                 System.err.println("chúc mừng bạn đã đăng ký thành công!!");
             }
         }
@@ -121,10 +124,12 @@ public class AccountManager {
             switch (choose){
                 case "1":
                     account.setAccountPassword(enterAccountPassword());
+                    saveAccount();
                     System.err.println("thiết lập thành công");
                     break;
                 case "2":
                     account.setAccountEmail(createAccountEmail());
+                    saveAccount();
                     System.err.println("thiết lập thành công");
                     break;
                 case "3":
@@ -134,5 +139,12 @@ public class AccountManager {
 
             }
         }while (!choose.equals("3"));
+    }
+    public void saveAccount(){
+        textFileFactory.saveFile(listAccount,"account.txt");
+    }
+    public void resetData(){
+        textFileFactory.resetFile("account.txt");
+        listAccount = new ArrayList<>();
     }
 }

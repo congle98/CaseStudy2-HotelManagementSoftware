@@ -1,4 +1,4 @@
-package HotelService;
+package hotelService;
 
 public enum ServiceType {
     Massage,MudBath

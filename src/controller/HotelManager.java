@@ -1,12 +1,12 @@
-package Controller;
+package controller;
 
-import HotelService.MassageService;
-import HotelService.MudBathService;
-import HotelService.Service;
-import Model.Account;
-import Model.Invoice;
-import Model.Renter;
-import Model.Room;
+import hotelService.MassageService;
+import hotelService.MudBathService;
+import hotelService.Service;
+import model.Invoice;
+import model.Renter;
+import model.Room;
+import storage.TextFileFactory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,23 +18,12 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public class HotelManager {
     private static  HotelManager INSTANCE;
+    private TextFileFactory textFileFactory = TextFileFactory.getINSTANCE();
     private Scanner scanner = new Scanner(System.in);
-    private ArrayList<Room> listRoom = new ArrayList<>();
-    private ArrayList<Invoice> listInvoice = new ArrayList<>();
-    private ArrayList<Renter> listRenter = new ArrayList<>();
+    private ArrayList<Room> listRoom =  textFileFactory.readerFile("listRoom.txt");
+    private ArrayList<Invoice> listInvoice = textFileFactory.readerFile("listInvoice.txt");
+    private ArrayList<Renter> listRenter = textFileFactory.readerFile("listRenter.txt");;
     private Double revenue=0.0;
-    private Double revenueJanuary;
-    private Double revenueFebruary;
-    private Double revenueMarch;
-    private Double revenueApril;
-    private Double revenueMay;
-    private Double revenueJune;
-    private Double revenueJuly;
-    private Double revenueAugust;
-    private Double revenueSeptember;
-    private Double revenueOctober;
-    private Double revenueNovember;
-    private Double revenueDecember;
     private String successNotify = "Thiết lập thành công";
     private String errorInputOption = "---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------";
 //    private ArrayList<Service> listService = new ArrayList<>();
@@ -83,6 +72,7 @@ public class HotelManager {
         room.setPrice(priceOfRoom);
         listRoom.add(room);
         sortByPrice(listRoom);
+        saveListRoom();
         System.out.println("Đã thêm phòng thành công!");
     }
 
@@ -189,6 +179,8 @@ public class HotelManager {
         }
         if(check){
             room.setId(idOfRoom);
+            saveListRoom();
+            saveInvoiceList();
         }
         else {
             System.err.println("Xin lỗi id của phòng đã tồn tại");
@@ -198,11 +190,15 @@ public class HotelManager {
     private void removeRoom(Room room){
         listRoom.remove(room);
         System.out.println("Đã xoá phòng thành công");
+        saveInvoiceList();
+        saveListRoom();
     }
     private void setPriceOfRoom(Room room){
         System.out.println("Mời nhập giá mới cho phòng");
         Double priceOfRoom = Double.parseDouble(scanner.nextLine());
         room.setPrice(priceOfRoom);
+        saveListRoom();
+        saveInvoiceList();
     }
     private void settingRoomMenu(Room room){
         String choose;
@@ -277,6 +273,7 @@ public class HotelManager {
             Renter renter = createNewRenter();
             renters.add(renter);
         }
+        saveListRenter();
         invoice.setRenters(renters);
         listRenter.addAll(renters);
 
@@ -305,6 +302,7 @@ public class HotelManager {
             invoice.setId(id);
             invoice.getRoom().setEmpty(false);
             listInvoice.add(invoice);
+            saveInvoiceList();
         }
     }
 
@@ -449,6 +447,7 @@ public class HotelManager {
             invoice.setPaid(true);
             invoice.getRoom().setEmpty(true);
             System.err.println("Hoá đơn ID:"+invoice.getId()+ " đã được thanh toán, số tiền là " +invoice.getPrice()+"vnđ , cảm ơn quý khách!");
+            saveInvoiceList();
         }
         else {
             System.err.println("xin lỗi hoá đơn này đã được thanh toán không thể thanh toán lại ");
@@ -496,6 +495,7 @@ public class HotelManager {
                 invoice.setRoom(room);
                 invoice.getRoom().setEmpty(false);
                 check = true;
+                saveInvoiceList();
             }
         }
         if(!check){
@@ -529,6 +529,7 @@ public class HotelManager {
                         System.err.println(errorInputOption);
                         break;
                 }
+                saveInvoiceList();
             }
             while (!choose.equals("4"));
         }
@@ -550,18 +551,24 @@ public class HotelManager {
         String nameOfRenter = scanner.nextLine();
         renter.setName(nameOfRenter);
         System.err.println(successNotify);
+        saveListRenter();
+        saveInvoiceList();
     }
     private void setPhoneOfRenter(Renter renter){
         System.out.println("Mời nhập số điện thoại mới");
         String numberOfRenter = scanner.nextLine();
         renter.setPhoneNumber(numberOfRenter);
         System.err.println(successNotify);
+        saveListRenter();
+        saveInvoiceList();
     }
     private void setIdCardOfRenter(Renter renter){
         System.out.println("Mời nhập email mới");
         String idCardOfRenter = scanner.nextLine();
         renter.setIdCard(idCardOfRenter);
         System.err.println(successNotify);
+        saveListRenter();
+        saveInvoiceList();
     }
 
 
@@ -597,9 +604,11 @@ public class HotelManager {
             switch (choose){
                 case "1":
                     addService(invoice,MassageService.getINSTANCE());
+                    saveInvoiceList();
                     break;
                 case "2":
                     addService(invoice,MudBathService.getINSTANCE());
+                    saveInvoiceList();
                     break;
                 case "3":
                     break;
@@ -616,6 +625,7 @@ public class HotelManager {
             if(index<=invoice.getServices().size()){
                 invoice.getServices().remove(index-1);
                 System.err.println("Đã xoá dịch vụ thành công");
+                saveInvoiceList();
             }
             else {
                 System.err.println("Nhập sai vị trí dịch vụ");
@@ -635,6 +645,25 @@ public class HotelManager {
 
     public void showRevenueMenu(){
         System.err.println("Tổng doanh thu: "+revenue+"vnđ");
+    }
+    private void saveInvoiceList(){
+       textFileFactory.saveFile(listInvoice,"listInvoice.txt");
+    }
+    private void saveListRenter(){
+        textFileFactory.saveFile(listRenter,"listRenter.txt");
+    }
+    private void saveListRoom(){
+        textFileFactory.saveFile(listRoom,"listRoom.txt");
+    }
+    public void resetData(){
+        textFileFactory.resetFile("listInvoice.txt");
+        textFileFactory.resetFile("listRenter.txt");
+        textFileFactory.resetFile("listRoom.txt");
+        listInvoice = new ArrayList<>();
+        listRoom = new ArrayList<>();
+        listRenter= new ArrayList<>();
+        System.out.println(successNotify);
+
     }
 
 

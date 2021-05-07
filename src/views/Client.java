@@ -1,14 +1,8 @@
-package Views;
+package views;
 
-import Controller.AccountManager;
-import Controller.HotelManager;
-import Model.Account;
-import Model.Renter;
-import Model.Room;
+import controller.AccountManager;
+import controller.HotelManager;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Scanner;
 public class Client {
     static final AccountManager accountManager = AccountManager.getINSTANCE();
@@ -29,11 +23,6 @@ public class Client {
 
 
 
-
-
-
-
-
     static void loginMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("-----------------Chào mừng bạn đến với khách sạn Thành Công-----------------");
@@ -42,6 +31,7 @@ public class Client {
             System.out.println("2.Đăng ký");
             System.out.println("3.Lấy lại mật khẩu");
             System.out.println("4.Thoát phần mềm");
+            System.out.println("5.Reset toàn bộ tài khoản");
             String choose = scanner.nextLine();
             switch (choose) {
                 case "1":
@@ -62,6 +52,10 @@ public class Client {
                 case "4":
                     System.exit(0);
                     break;
+                case "5":
+                    accountManager.resetData();
+                    System.err.println("---------------Đã thiết lập lại toàn bộ dữ liệu tài khoản!!---------------");
+                    break;
                 default:
                     System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
                     break;
@@ -81,7 +75,8 @@ public class Client {
             System.out.println("7.Xem thông tin tất cả hoá đơn");
             System.out.println("8.Thiết lập hoá đơn theo id");
             System.out.println("9.Xem tổng doanh thu");
-            System.out.println("10.Thoát ra ngoài");
+            System.out.println("0.Thoát ra ngoài");
+            System.out.println("11.Thiết lập lại toàn bộ dữ liệu quản lý");
             choose = scanner.nextLine();
             switch (choose){
                 case "1":
@@ -111,7 +106,16 @@ public class Client {
                     break;
                 case "9":
                     hotelManager.showRevenueMenu();
+                    break;
+                case "0":
+                    break;
+                case "11":
+                    hotelManager.resetData();
+                    break;
+                default:
+                    System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
+                    break;
             }
-        }while (!choose.equals("10"));
+        }while (!choose.equals("0"));
     }
 }

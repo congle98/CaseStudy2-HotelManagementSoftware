@@ -1,6 +1,8 @@
-package Model;
+package model;
 
-public class Room {
+import java.io.Serializable;
+
+public class Room implements Serializable {
     private String id;
     private Double price;
     private boolean empty;

@@ -1,11 +1,12 @@
-package Model;
+package model;
 
-import HotelService.Service;
+import hotelService.Service;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Invoice {
+public class Invoice  implements Serializable {
     private int id ;
     private Room room;
     private ArrayList<Renter> renters;

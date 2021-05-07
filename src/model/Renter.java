@@ -1,6 +1,8 @@
-package Model;
+package model;
 
-public class Renter {
+import java.io.Serializable;
+
+public class Renter implements Serializable {
     private String name;
     private String idCard;
     private String phoneNumber;

@@ -1,4 +1,4 @@
-package HotelService;
+package hotelService;
 
 //public class ServiceFactory {
 //    private Service massageService;
