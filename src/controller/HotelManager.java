@@ -43,7 +43,7 @@ public class HotelManager {
     }
 
     // khởi tạo phòng mới với các phương thức hỗ trợ nhập
-    public String enterIdRoom(){
+    private String enterIdRoom(){
         String idRoom="";
         Boolean check = true;
         System.out.println("Mời nhập id của phòng");
@@ -151,7 +151,7 @@ public class HotelManager {
     }
 
     //lấy ra room theo id để chỉnh sửa
-    public Room getRoomById(){
+    private Room getRoomById(){
         System.out.println("Mời nhập id của phòng");
         String idOfRoom = scanner.nextLine();
 
@@ -378,7 +378,7 @@ public class HotelManager {
         }
     }
     // lấy hoá đơn theo id
-    public Invoice getInvoiceById(){
+    private Invoice getInvoiceById(){
 
         System.out.println("Mời nhập id của hoá đơn");
         int idOfInvoice;
@@ -440,7 +440,7 @@ public class HotelManager {
             return "Chưa có dữ liệu";
         }
     }
-    public void showInvoice(Invoice invoice) {
+    private void showInvoice(Invoice invoice) {
         String renterInfor = "";
         String serviceInfor = "";
         String price = "";
@@ -518,7 +518,7 @@ public class HotelManager {
     }
 
     //thanh toán hoá đơn
-    public void payInvoice(Invoice invoice){
+    private void payInvoice(Invoice invoice){
         if (!invoice.getPaid()){
             addDayEndToInvoice(invoice);
             setPriceToInvoice(invoice);
@@ -538,7 +538,7 @@ public class HotelManager {
             System.err.println("xin lỗi hoá đơn này đã được thanh toán không thể thanh toán lại ");
         }
     }
-    public void settingInvoiceMenu(Invoice invoice){
+    private void settingInvoiceMenu(Invoice invoice){
         String choose;
         if(!invoice.getPaid()){
             do {
