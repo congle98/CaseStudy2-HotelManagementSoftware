@@ -1,5 +1,6 @@
 package controller;
 
+import checkInput.CheckInput;
 import model.Account;
 import storage.TextFileFactory;
 
@@ -7,11 +8,15 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AccountManager {
+    private static AccountManager INSTANCE;
     private static Scanner scanner = new Scanner(System.in);
     private TextFileFactory textFileFactory = TextFileFactory.getINSTANCE();
+    private CheckInput checkInput = CheckInput.getINSTANCE();
     private Account account;
     private  ArrayList<Account> listAccount = textFileFactory.readerFile("account.txt");
-    private static AccountManager INSTANCE;
+    private String accountError = "Tài khoản hoặc mật khẩu phải từ 6-12 ký tự chữ hoặc số không được chứa khoảng trắng hay ký tự đặc biệt, mời nhập lại!";
+    private String emailError = "Nhập sai định dạng email mời nhập lại VD: anhcongdeptrai@gmail.com";
+
 
     private AccountManager(){
 
@@ -27,9 +32,12 @@ public class AccountManager {
 
     private String createAccountName(){
         System.out.println("Mời nhập tên tài khoản");
-        String accountName = scanner.nextLine();
+        String accountName;
+        while (!checkInput.checkAccountNamePassword(accountName = scanner.nextLine())){
+            System.err.println(accountError);
+        }
         for (Account a:listAccount
-             ) {
+        ) {
             if((a.getAccountName().equals(accountName))){
                 System.err.println("xin lỗi tên tài khoản đã tồn tại");
                 return null;
@@ -41,13 +49,19 @@ public class AccountManager {
 
     private String enterAccountPassword(){
         System.out.println("Mời nhập mật khẩu ");
-        String accountPassword = scanner.nextLine();
+        String accountPassword;
+        while (!checkInput.checkAccountNamePassword(accountPassword = scanner.nextLine())){
+            System.err.println(accountError);
+        }
         return accountPassword;
     }
 
     private String createAccountEmail(){
         System.out.println("Mời nhập email ");
-        String accountEmail = scanner.nextLine();
+        String accountEmail;
+        while (!checkInput.checkEmail(accountEmail = scanner.nextLine())){
+            System.err.println(emailError);
+        }
         for (Account a:listAccount
         ) {
             if((a.getAccountEmail().equals(accountEmail))){
@@ -76,12 +90,18 @@ public class AccountManager {
 
     private String loginAccountName(){
         System.out.println("Mời nhập tên tài khoản");
-        String accountName = scanner.nextLine();
+        String accountName;
+        while (!checkInput.checkAccountNamePassword(accountName = scanner.nextLine())){
+            System.err.println(accountError);
+        }
         return accountName;
     }
     private String loginAccountEmail(){
         System.out.println("Mời nhập email ");
-        String accountEmail = scanner.nextLine();
+        String accountEmail;
+        while (!checkInput.checkEmail(accountEmail = scanner.nextLine())){
+            System.err.println(emailError);
+        }
         return accountEmail;
     }
     public boolean login(){

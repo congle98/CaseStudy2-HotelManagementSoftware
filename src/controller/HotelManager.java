@@ -1,5 +1,6 @@
 package controller;
 
+import checkInput.CheckInput;
 import hotelService.MassageService;
 import hotelService.MudBathService;
 import hotelService.Service;
@@ -18,13 +19,16 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public class HotelManager {
     private static  HotelManager INSTANCE;
-    private TextFileFactory textFileFactory = TextFileFactory.getINSTANCE();
     private Scanner scanner = new Scanner(System.in);
+    private TextFileFactory textFileFactory = TextFileFactory.getINSTANCE();
+    private CheckInput checkInput = CheckInput.getINSTANCE();
     private ArrayList<Room> listRoom =  textFileFactory.readerFile("listRoom.txt");
     private ArrayList<Invoice> listInvoice = textFileFactory.readerFile("listInvoice.txt");
     private ArrayList<Renter> listRenter = textFileFactory.readerFile("listRenter.txt");;
     private String successNotify = "Thiết lập thành công";
     private String errorInputOption = "---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------";
+    private String intError = "Mời nhập kiểu số";
+    private String dateError = "Nhập sai ngày tháng hoặc định dạng ngày tháng mời nhập lại VD:01/12/2021";
 //    private ArrayList<Service> listService = new ArrayList<>();
 
 
@@ -60,7 +64,12 @@ public class HotelManager {
     }
     private Double enterPriceOfRoom(){
         System.out.println("Mời nhập giá phòng");
-        Double priceOfRoom = Double.parseDouble(scanner.nextLine());
+        Double priceOfRoom;
+        String pOR;
+        while (!checkInput.checkINT(pOR=scanner.nextLine())){
+            System.err.println(intError);
+        }
+        priceOfRoom = Double.parseDouble(pOR);
         return priceOfRoom;
     }
     public void createNewRoom(){
@@ -78,7 +87,12 @@ public class HotelManager {
     // lấy ra các phòng trống, sắp xếp và hiển thị theo giá
     private ArrayList<Room> roomsEmpty(){
         System.out.println("Mời nhập khoảng giá");
-        double price = Double.parseDouble(scanner.nextLine());
+        double price;
+        String pr="";
+//        while (!checkInput.checkINT(pr=scanner.nextLine())){
+//            System.err.println(intError);
+//        }
+        price = Double.parseDouble(checkInt(pr));
         ArrayList<Room> roomsEmpty = new ArrayList<>();
         for (Room room: listRoom
              ) {
@@ -221,7 +235,12 @@ public class HotelManager {
     }
     private void setPriceOfRoom(Room room){
         System.out.println("Mời nhập giá mới cho phòng");
-        Double priceOfRoom = Double.parseDouble(scanner.nextLine());
+        Double priceOfRoom;
+        String pOR;
+        while (!checkInput.checkINT(pOR=scanner.nextLine())){
+            System.err.println(intError);
+        }
+        priceOfRoom = Double.parseDouble(pOR);
         room.setPrice(priceOfRoom);
         saveListRoom();
         saveInvoiceList();
@@ -293,7 +312,12 @@ public class HotelManager {
     //thêm khách thuê vào hoá đơn
     private void addRenterToInvoice(Invoice invoice){
         System.out.println("Mời nhập số lượng khách thuê");
-        int renterNumber = Integer.parseInt(scanner.nextLine());
+        int renterNumber;
+        String rN;
+        while (!checkInput.checkINT(rN=scanner.nextLine())){
+            System.err.println(intError);
+        }
+        renterNumber = Integer.parseInt(rN);
         ArrayList<Renter> renters = new ArrayList<>();
         for (int i = 0; i < renterNumber; i++) {
             Renter renter = createNewRenter();
@@ -306,10 +330,18 @@ public class HotelManager {
     }
     private void addDayStartToInvoice(Invoice invoice){
         System.err.println("Mời nhập thời gian bắt đầu cho thuê theo định dạng dd/mm/yyyy");
-        String dayStart = scanner.nextLine();
-        String time[] = dayStart.split("/");
-        LocalDate dateTime = LocalDate.of(Integer.parseInt(time[2]),Integer.parseInt(time[1]),Integer.parseInt(time[0]));
-        invoice.setDayStart(dateTime);
+        while (true){
+            try {
+                String dayStart = scanner.nextLine();
+                String time[] = dayStart.split("/");
+                LocalDate dateTime = LocalDate.of(Integer.parseInt(time[2]),Integer.parseInt(time[1]),Integer.parseInt(time[0]));
+                invoice.setDayStart(dateTime);
+                break;
+            }
+           catch (Exception ex){
+               System.err.println(dateError);
+           }
+        }
     }
 //    private void addDayEndToInvoice(Invoice invoice){
 //        System.err.println("Mời nhập ngày tháng năm kết thúc cho thuê theo định dạng dd/mm/yyyy");
@@ -328,6 +360,7 @@ public class HotelManager {
             invoice.setId(id);
             invoice.getRoom().setEmpty(false);
             listInvoice.add(invoice);
+            saveListRoom();
             saveInvoiceList();
         }
     }
@@ -348,8 +381,12 @@ public class HotelManager {
     public Invoice getInvoiceById(){
 
         System.out.println("Mời nhập id của hoá đơn");
-        int idOfInvoice = Integer.parseInt(scanner.nextLine());
-
+        int idOfInvoice;
+        String iOR;
+        while (!checkInput.checkINT(iOR=scanner.nextLine())){
+            System.err.println(intError);
+        }
+        idOfInvoice = Integer.parseInt(iOR);
         for (Invoice invoice: listInvoice
              ) {
             if(invoice.getId()==idOfInvoice){
@@ -440,9 +477,25 @@ public class HotelManager {
     private void addDayEndToInvoice(Invoice invoice){
         do {
             System.err.println("Mời nhập ngày kết thúc hoá đơn theo định dạng dd/mm/yyyy");
-            String dayEnd = scanner.nextLine();
-            String time[] = dayEnd.split("/");
-            LocalDate dateTime = LocalDate.of(Integer.parseInt(time[2]),Integer.parseInt(time[1]),Integer.parseInt(time[0]));
+            String dayEnd;
+            String time[];
+            LocalDate dateTime;
+//            while (!checkInput.checkDate(dayEnd=scanner.nextLine())){
+//                System.err.println(dateError);
+//            }
+//            String time[] = dayEnd.split("/");
+//            LocalDate dateTime = LocalDate.of(Integer.parseInt(time[2]),Integer.parseInt(time[1]),Integer.parseInt(time[0]));
+            while (true){
+                try {
+                    dayEnd = scanner.nextLine();
+                    time = dayEnd.split("/");
+                    dateTime = LocalDate.of(Integer.parseInt(time[2]),Integer.parseInt(time[1]),Integer.parseInt(time[0]));
+                    break;
+                }
+                catch (Exception ex){
+                    System.err.println(dateError);
+                }
+            }
             if(DAYS.between(invoice.getDayStart(), dateTime)>0){
                 invoice.setDayEnd(dateTime);
                 break;
@@ -451,7 +504,6 @@ public class HotelManager {
                 System.err.println("Ngày kết thúc hoá đơn phải lớn hơn ngày bắt đầu !!!");
             }
         }while (true);
-
     }
     //
     private void setPriceToInvoice(Invoice invoice){
@@ -473,7 +525,14 @@ public class HotelManager {
             invoice.setPaid(true);
             invoice.getRoom().setEmpty(true);
             System.err.println("Hoá đơn ID:"+invoice.getId()+ " đã được thanh toán, số tiền là " +invoice.getPrice()+"vnđ , cảm ơn quý khách!");
+            for (Room r:listRoom
+                 ) {
+                if(r.getId().equals(invoice.getRoom().getId())){
+                    r.setEmpty(true);
+                }
+            }
             saveInvoiceList();
+            saveListRoom();
         }
         else {
             System.err.println("xin lỗi hoá đơn này đã được thanh toán không thể thanh toán lại ");
@@ -518,10 +577,23 @@ public class HotelManager {
              ) {
             if(room.getId().equals(idOfRoom)&&room.isEmpty()){
                 invoice.getRoom().setEmpty(true);
+                for (Room r:listRoom
+                     ) {
+                    if(r.getId().equals(invoice.getRoom().getId())){
+                        r.setEmpty(true);
+                    }
+                }
                 invoice.setRoom(room);
                 invoice.getRoom().setEmpty(false);
+                for (Room r:listRoom
+                ) {
+                    if(r.getId().equals(invoice.getRoom().getId())){
+                        r.setEmpty(false);
+                    }
+                }
                 check = true;
                 saveInvoiceList();
+                saveListRoom();
                 System.out.println(successNotify);
             }
         }
@@ -590,7 +662,7 @@ public class HotelManager {
         saveInvoiceList();
     }
     private void setIdCardOfRenter(Renter renter){
-        System.out.println("Mời nhập email mới");
+        System.out.println("Mời nhập chứng minh thư mới");
         String idCardOfRenter = scanner.nextLine();
         renter.setIdCard(idCardOfRenter);
         System.err.println(successNotify);
@@ -648,7 +720,12 @@ public class HotelManager {
     private void removeService(Invoice invoice){
         if(invoice.getServices().size()!=0){
             System.out.println("Bạn muốn xoá dịch vụ thứ mấy");
-            int index = Integer.parseInt(scanner.nextLine());
+            int index;
+            String idex;
+            while (!checkInput.checkINT(idex=scanner.nextLine())){
+                System.err.println(intError);
+            }
+            index = Integer.parseInt(idex);
             if(index<=invoice.getServices().size()){
                 invoice.getServices().remove(index-1);
                 System.err.println("Đã xoá dịch vụ thành công");
@@ -741,6 +818,12 @@ public class HotelManager {
         listRenter= new ArrayList<>();
         System.out.println(successNotify);
 
+    }
+    private String checkInt(String str){
+        while (!checkInput.checkINT(str=scanner.nextLine())){
+            System.err.println(intError);
+        }
+        return str;
     }
 
 
