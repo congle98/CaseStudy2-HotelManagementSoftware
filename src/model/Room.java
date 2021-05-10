@@ -41,12 +41,12 @@ public class Room implements Serializable {
         this.empty = empty;
     }
 
-    @Override
-    public String toString() {
-        String empty = isEmpty()?", Phòng còn trống":", Phòng đã có người thuê";
-        return "Phòng" +
-                " id: " + id +
-                ", giá: " + price +"vnđ"+
-                empty+"\n";
-    }
+//    @Override
+//    public String toString() {
+//        String empty = isEmpty()?", Phòng còn trống":", Phòng đã có người thuê";
+//        return "Phòng" +
+//                " id: " + id +
+//                ", giá: " + price +"vnđ"+
+//                empty+"\n";
+//    }
 }

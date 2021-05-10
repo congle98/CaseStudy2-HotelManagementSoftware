@@ -81,7 +81,7 @@ public class HotelManager {
         listRoom.add(room);
         sortByPrice(listRoom);
         saveListRoom();
-        System.out.println("Đã thêm phòng thành công!");
+        System.out.println(successNotify);
     }
 
     // lấy ra các phòng trống, sắp xếp và hiển thị theo giá
@@ -218,7 +218,15 @@ public class HotelManager {
             }
         }
         if(check){
+            Room roomInInvoice = new Room();
+            for (Invoice invoice:listInvoice
+            ) {
+                if(invoice.getPaid()==false&&invoice.getRoom().getId().equals(room.getId())){
+                    roomInInvoice = invoice.getRoom();
+                }
+            }
             room.setId(idOfRoom);
+            roomInInvoice.setId(idOfRoom);
             saveListRoom();
             saveInvoiceList();
         }
@@ -240,7 +248,15 @@ public class HotelManager {
         while (!checkInput.checkINT(pOR=scanner.nextLine())){
             System.err.println(intError);
         }
+        Room roomInInvoice = new Room();
+        for (Invoice invoice:listInvoice
+        ) {
+            if(invoice.getPaid()==false&&invoice.getRoom().getId().equals(room.getId())){
+                roomInInvoice = invoice.getRoom();
+            }
+        }
         priceOfRoom = Double.parseDouble(pOR);
+        roomInInvoice.setPrice(priceOfRoom);
         room.setPrice(priceOfRoom);
         saveListRoom();
         saveInvoiceList();
@@ -290,18 +306,29 @@ public class HotelManager {
     private String enterNameOfRenter(){
         System.out.println("Mời nhập tên khách hàng");
         String nameOfRenter = scanner.nextLine();
+        System.err.println(successNotify);
+        saveListRenter();
+        saveInvoiceList();
         return nameOfRenter;
     }
     private String enterIDCardOfRenter(){
         System.out.println("Mời nhập số chứng minh thư của khách hàng");
         String IDCardOfRenter = scanner.nextLine();
+        System.err.println(successNotify);
+        saveListRenter();
+        saveInvoiceList();
         return IDCardOfRenter;
     }
     private String enterNumberPhoneOfRenter(){
         System.out.println("Mời nhập số điện thoại của khách hàng");
         String numberPhoneOfRenter = scanner.nextLine();
+        System.err.println(successNotify);
+        saveListRenter();
+        saveInvoiceList();
         return numberPhoneOfRenter;
     }
+
+    //thêm khách thuê
     private Renter createNewRenter(){
         Renter renter = new Renter();
         renter.setName(enterNameOfRenter());
@@ -608,19 +635,19 @@ public class HotelManager {
             String choose;
             do {
                 System.out.println("1. Thay đổi tên khách hàng");
-                System.out.println("2. Thay đổi số điện thoại khách hàng");
-                System.out.println("3. Thay đổi email khách hàng");
+                System.out.println("2. Thay đổi số điện thoại của khách hàng");
+                System.out.println("3. Thay đổi chứng minh thư của khách hàng");
                 System.out.println("4. Thoát");
                 choose = scanner.nextLine();
                 switch (choose){
                     case "1":
-                        setNameOfRenter(renter);
+                        renter.setName(enterNameOfRenter());
                         break;
                     case "2":
-                        setPhoneOfRenter(renter);
+                        renter.setPhoneNumber(enterNumberPhoneOfRenter());
                         break;
                     case "3":
-                        setIdCardOfRenter(renter);
+                        renter.setIdCard(enterIDCardOfRenter());
                         break;
                     case "4":
                         break;
@@ -645,30 +672,30 @@ public class HotelManager {
             return null;
         }
     }
-    private void setNameOfRenter(Renter renter){
-        System.out.println("Mời nhập tên mới");
-        String nameOfRenter = scanner.nextLine();
-        renter.setName(nameOfRenter);
-        System.err.println(successNotify);
-        saveListRenter();
-        saveInvoiceList();
-    }
-    private void setPhoneOfRenter(Renter renter){
-        System.out.println("Mời nhập số điện thoại mới");
-        String numberOfRenter = scanner.nextLine();
-        renter.setPhoneNumber(numberOfRenter);
-        System.err.println(successNotify);
-        saveListRenter();
-        saveInvoiceList();
-    }
-    private void setIdCardOfRenter(Renter renter){
-        System.out.println("Mời nhập chứng minh thư mới");
-        String idCardOfRenter = scanner.nextLine();
-        renter.setIdCard(idCardOfRenter);
-        System.err.println(successNotify);
-        saveListRenter();
-        saveInvoiceList();
-    }
+//    private void setNameOfRenter(Renter renter){
+//        System.out.println("Mời nhập tên mới");
+//        String nameOfRenter = scanner.nextLine();
+//        renter.setName(nameOfRenter);
+//        System.err.println(successNotify);
+//        saveListRenter();
+//        saveInvoiceList();
+//    }
+//    private void setPhoneOfRenter(Renter renter){
+//        System.out.println("Mời nhập số điện thoại mới");
+//        String numberOfRenter = scanner.nextLine();
+//        renter.setPhoneNumber(numberOfRenter);
+//        System.err.println(successNotify);
+//        saveListRenter();
+//        saveInvoiceList();
+//    }
+//    private void setIdCardOfRenter(Renter renter){
+//        System.out.println("Mời nhập chứng minh thư mới");
+//        String idCardOfRenter = scanner.nextLine();
+//        renter.setIdCard(idCardOfRenter);
+//        System.err.println(successNotify);
+//        saveListRenter();
+//        saveInvoiceList();
+//    }
 
 
     private void setSeviceMenu(Invoice invoice){
@@ -825,7 +852,28 @@ public class HotelManager {
         }
         return str;
     }
-
-
-
+    private void setNameOfRenter(Renter renter){
+        System.out.println("Mời nhập tên mới");
+        String nameOfRenter = scanner.nextLine();
+        renter.setName(nameOfRenter);
+        System.err.println(successNotify);
+        saveListRenter();
+        saveInvoiceList();
+    }
+    private void setPhoneOfRenter(Renter renter){
+        System.out.println("Mời nhập số điện thoại mới");
+        String numberOfRenter = scanner.nextLine();
+        renter.setPhoneNumber(numberOfRenter);
+        System.err.println(successNotify);
+        saveListRenter();
+        saveInvoiceList();
+    }
+    private void setIdCardOfRenter(Renter renter){
+        System.out.println("Mời nhập chứng minh thư mới");
+        String idCardOfRenter = scanner.nextLine();
+        renter.setIdCard(idCardOfRenter);
+        System.err.println(successNotify);
+        saveListRenter();
+        saveInvoiceList();
+    }
 }
