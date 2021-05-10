@@ -12,8 +12,8 @@ public class AccountManager {
     private static Scanner scanner = new Scanner(System.in);
     private TextFileFactory textFileFactory = TextFileFactory.getINSTANCE();
     private CheckInput checkInput = CheckInput.getINSTANCE();
-    private Account account;
-    private  ArrayList<Account> listAccount = textFileFactory.readerFile("account.txt");
+    public  Account account;
+    public   ArrayList<Account> listAccount = textFileFactory.readerFile("account.txt");
     private String accountError = "Tài khoản hoặc mật khẩu phải từ 6-12 ký tự chữ hoặc số không được chứa khoảng trắng hay ký tự đặc biệt, mời nhập lại!";
     private String emailError = "Nhập sai định dạng email mời nhập lại VD: anhcongdeptrai@gmail.com";
 
@@ -47,7 +47,7 @@ public class AccountManager {
 
     }
 
-    private String enterAccountPassword(){
+    public String enterAccountPassword(){
         System.out.println("Mời nhập mật khẩu ");
         String accountPassword;
         while (!checkInput.checkAccountNamePassword(accountPassword = scanner.nextLine())){
@@ -56,7 +56,7 @@ public class AccountManager {
         return accountPassword;
     }
 
-    private String createAccountEmail(){
+    public String createAccountEmail(){
         System.out.println("Mời nhập email ");
         String accountEmail;
         while (!checkInput.checkEmail(accountEmail = scanner.nextLine())){
@@ -133,33 +133,33 @@ public class AccountManager {
             System.err.println("Xin lỗi tên đăng nhập và email không trùng khớp với bất kỳ tài khoản nào!");
         }
     }
-    public void accountMenu(){
-        Scanner scanner = new Scanner(System.in);
-        String choose;
-        do {
-            System.out.println("1.Thay đổi mật khẩu");
-            System.out.println("2.Thay đổi email");
-            System.out.println("3.Thoát ra ngoài");
-            choose = scanner.nextLine();
-            switch (choose){
-                case "1":
-                    account.setAccountPassword(enterAccountPassword());
-                    saveAccount();
-                    System.err.println("thiết lập thành công");
-                    break;
-                case "2":
-                    account.setAccountEmail(createAccountEmail());
-                    saveAccount();
-                    System.err.println("thiết lập thành công");
-                    break;
-                case "3":
-                    break;
-                default:
-                    System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
-
-            }
-        }while (!choose.equals("3"));
-    }
+//    public void accountMenu(){
+//        Scanner scanner = new Scanner(System.in);
+//        String choose;
+//        do {
+//            System.out.println("1.Thay đổi mật khẩu");
+//            System.out.println("2.Thay đổi email");
+//            System.out.println("3.Thoát ra ngoài");
+//            choose = scanner.nextLine();
+//            switch (choose){
+//                case "1":
+//                    account.setAccountPassword(enterAccountPassword());
+//                    saveAccount();
+//                    System.err.println("thiết lập thành công");
+//                    break;
+//                case "2":
+//                    account.setAccountEmail(createAccountEmail());
+//                    saveAccount();
+//                    System.err.println("thiết lập thành công");
+//                    break;
+//                case "3":
+//                    break;
+//                default:
+//                    System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
+//
+//            }
+//        }while (!choose.equals("3"));
+//    }
     public void saveAccount(){
         textFileFactory.saveFile(listAccount,"account.txt");
     }
