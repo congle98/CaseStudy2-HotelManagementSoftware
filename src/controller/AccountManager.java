@@ -1,6 +1,5 @@
 package controller;
 
-import checkInput.CheckInput;
 import model.Account;
 import storage.TextFileFactory;
 

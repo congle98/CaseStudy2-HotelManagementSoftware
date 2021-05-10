@@ -1,6 +1,5 @@
 package controller;
 
-import checkInput.CheckInput;
 import model.Service;
 import model.Invoice;
 import model.Renter;

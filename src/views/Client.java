@@ -1,6 +1,6 @@
 package views;
 
-import checkInput.CheckInput;
+import controller.CheckInput;
 import controller.AccountManager;
 import controller.HotelManager;
 import model.MassageService;
