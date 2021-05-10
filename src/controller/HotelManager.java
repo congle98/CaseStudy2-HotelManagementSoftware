@@ -113,15 +113,13 @@ public class HotelManager {
 
     //hiển thị tất cả các phòng
     public void showAllRoom(){
-
         if(listRoom.size()==0){
             System.err.println("Chưa có phòng nào");
         }
         else {
             for (Room r:listRoom
                  ) {
-                showRoom(r);
-                System.out.println("--------------------------------");
+                System.out.println(showRoom(r));
             }
         }
 
@@ -132,7 +130,7 @@ public class HotelManager {
     private void sortByPrice(ArrayList<Room> rooms){
         Collections.sort(rooms,new Comparator<Room>(){
             public int compare(Room o1, Room o2) {
-                return o1.getPrice() > o2.getPrice() ? 1 : -1;
+                return (o1.getPrice() > o2.getPrice()) ? 1 : -1;
             }
         });
     }
@@ -163,15 +161,10 @@ public class HotelManager {
 
     //menuroom
 //
-    public void showRoom(Room room){
+    public String showRoom(Room room){
         String empty = room.isEmpty()?", Còn trống":", Đã có người thuê";
         String show =  "Phòng ID: "+room.getId()+" ,Giá: "+room.getPrice()+" vnđ"+ empty;
-        if(room.isEmpty()){
-            System.out.println(show);
-        }
-        else {
-            System.err.println(show);
-        }
+            return show+"\n-------------------------------";
     }
     public void setIdRoom(Room room){
         System.out.println("Mời nhập id mới của phòng");
