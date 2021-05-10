@@ -379,12 +379,6 @@ public class Client {
     static void saveInvoiceList(){
         textFileFactory.saveFile(hotelManager.listInvoice,"listInvoice.txt");
     }
-    static void saveListRenter(){
-        textFileFactory.saveFile(hotelManager.listRenter, "listRenter.txt");
-    }
-    static void saveListRoom(){
-        textFileFactory.saveFile(hotelManager.listRoom,"listRoom.txt");
-    }
     static void saveAccount(){
         textFileFactory.saveFile(accountManager.listAccount,"account.txt");
     }

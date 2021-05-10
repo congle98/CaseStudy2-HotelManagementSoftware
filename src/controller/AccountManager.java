@@ -133,33 +133,6 @@ public class AccountManager {
             System.err.println("Xin lỗi tên đăng nhập và email không trùng khớp với bất kỳ tài khoản nào!");
         }
     }
-//    public void accountMenu(){
-//        Scanner scanner = new Scanner(System.in);
-//        String choose;
-//        do {
-//            System.out.println("1.Thay đổi mật khẩu");
-//            System.out.println("2.Thay đổi email");
-//            System.out.println("3.Thoát ra ngoài");
-//            choose = scanner.nextLine();
-//            switch (choose){
-//                case "1":
-//                    account.setAccountPassword(enterAccountPassword());
-//                    saveAccount();
-//                    System.err.println("thiết lập thành công");
-//                    break;
-//                case "2":
-//                    account.setAccountEmail(createAccountEmail());
-//                    saveAccount();
-//                    System.err.println("thiết lập thành công");
-//                    break;
-//                case "3":
-//                    break;
-//                default:
-//                    System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
-//
-//            }
-//        }while (!choose.equals("3"));
-//    }
     public void saveAccount(){
         textFileFactory.saveFile(listAccount,"account.txt");
     }
