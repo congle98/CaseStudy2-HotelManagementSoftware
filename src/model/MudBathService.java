@@ -1,8 +1,6 @@
-package hotelService;
+package model;
 
-import java.io.Serializable;
-
-public class MudBathService implements Service{
+public class MudBathService implements Service {
     private static MudBathService INSTANCE;
     private MudBathService(){
 

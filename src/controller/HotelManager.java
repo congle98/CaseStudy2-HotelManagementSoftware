@@ -1,9 +1,7 @@
 package controller;
 
 import checkInput.CheckInput;
-import hotelService.MassageService;
-import hotelService.MudBathService;
-import hotelService.Service;
+import model.Service;
 import model.Invoice;
 import model.Renter;
 import model.Room;
@@ -106,7 +104,7 @@ public class HotelManager {
         else {
             for (Room r:rooms
                  ) {
-                showRoom(r);
+                System.out.println(showRoom(r));
             }
         }
     }

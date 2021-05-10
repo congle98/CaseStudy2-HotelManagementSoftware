@@ -1,6 +1,4 @@
-package hotelService;
-
-import java.io.Serializable;
+package model;
 
 public class MassageService implements Service {
     private static MassageService INSTANCE;

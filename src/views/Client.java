@@ -3,18 +3,14 @@ package views;
 import checkInput.CheckInput;
 import controller.AccountManager;
 import controller.HotelManager;
-import hotelService.MassageService;
-import hotelService.MudBathService;
-import model.Account;
+import model.MassageService;
+import model.MudBathService;
 import model.Invoice;
 import model.Renter;
 import model.Room;
 import storage.TextFileFactory;
 
-import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Client {
     static final AccountManager accountManager = AccountManager.getINSTANCE();
