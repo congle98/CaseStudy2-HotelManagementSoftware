@@ -202,7 +202,12 @@ public class Client {
                 choose= scanner.nextLine();
                 switch (choose){
                     case "1":
-                        hotelManager.showInvoice(invoice);
+                        if(!invoice.getPaid()){
+                            System.out.println(hotelManager.showInvoice(invoice));
+                        }
+                        else {
+                            System.err.println(hotelManager.showInvoice(invoice));
+                        }
                         break;
                     case "2":
                         hotelManager.payInvoice(invoice);

@@ -329,7 +329,13 @@ public class HotelManager {
         }
         else {
             for (int i = 0; i < listInvoice.size(); i++) {
-                showInvoice(listInvoice.get(i));
+                if (listInvoice.get(i).getPaid()){
+                    System.err.println(showInvoice(listInvoice.get(i)));
+                }
+
+                if (!listInvoice.get(i).getPaid()){
+                    System.out.println(showInvoice(listInvoice.get(i)));
+                }
             }
         }
     }
@@ -367,7 +373,7 @@ public class HotelManager {
             return "Chưa có dữ liệu";
         }
     }
-    public void showInvoice(Invoice invoice) {
+    public String showInvoice(Invoice invoice) {
         String renterInfor = "";
         String serviceInfor = "";
         String price = "";
@@ -391,12 +397,13 @@ public class HotelManager {
                 "\nTổng tiền: "+price+
                 "\nNgày nhận phòng: "+formatDate(invoice.getDayStart())+", Ngày trả phòng: "+ formatDate(invoice.getDayEnd())+
                 "\n-------------------------------------------------";
-        if(invoice.getPaid()){
-            System.err.println(infor);
-        }
-        else {
-            System.out.println(infor);
-        }
+//        if(invoice.getPaid()){
+//            System.err.println(infor);
+//        }
+//        else {
+//            System.out.println(infor);
+
+        return infor;
 
     }
 
