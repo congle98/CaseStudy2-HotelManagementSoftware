@@ -19,9 +19,9 @@ public class HotelManager {
     private Scanner scanner = new Scanner(System.in);
     private TextFileFactory textFileFactory = TextFileFactory.getINSTANCE();
     private CheckInput checkInput = CheckInput.getINSTANCE();
-    public ArrayList<Room> listRoom =  textFileFactory.readerFile("listRoom.txt");
-    public ArrayList<Invoice> listInvoice = textFileFactory.readerFile("listInvoice.txt");
-    public ArrayList<Renter> listRenter = textFileFactory.readerFile("listRenter.txt");;
+    private ArrayList<Room> listRoom =  textFileFactory.readerFile("listRoom.txt");
+    private ArrayList<Invoice> listInvoice = textFileFactory.readerFile("listInvoice.txt");
+    private ArrayList<Renter> listRenter = textFileFactory.readerFile("listRenter.txt");;
     private String successNotify = "Thiết lập thành công";
     private String intError = "Mời nhập kiểu số";
     private String dateError = "Nhập sai ngày tháng hoặc định dạng ngày tháng mời nhập lại VD:01/12/2021";
@@ -35,7 +35,7 @@ public class HotelManager {
     }
 
     // khởi tạo phòng mới với các phương thức hỗ trợ nhập
-    private String enterIdRoom(){
+    private String createIdRoom(){
         String idRoom="";
         Boolean check = true;
         System.out.println("Mời nhập id của phòng");
@@ -44,17 +44,17 @@ public class HotelManager {
             idRoom = scanner.nextLine();
             for (Room room:listRoom
                  ) {
+
                 if(room.getId().equals(idRoom)){
                     check = false;
                     System.err.println("phòng đã tồn tại mời nhập lại");
                     break;
                 }
             }
-
         }while (!check);
         return idRoom;
     }
-    private Double enterPriceOfRoom(){
+    private Double createPriceOfRoom(){
         System.out.println("Mời nhập giá phòng");
         Double priceOfRoom;
         String pOR;
@@ -66,8 +66,8 @@ public class HotelManager {
     }
     public void createNewRoom(){
         Room room = new Room();
-        String idRoom = enterIdRoom();
-        Double priceOfRoom = enterPriceOfRoom();
+        String idRoom = createIdRoom();
+        Double priceOfRoom = createPriceOfRoom();
         room.setId(idRoom);
         room.setPrice(priceOfRoom);
         listRoom.add(room);
@@ -77,7 +77,7 @@ public class HotelManager {
     }
 
     // lấy ra các phòng trống, sắp xếp và hiển thị theo giá
-    private ArrayList<Room> roomsEmpty(){
+    private ArrayList<Room> searchRoomsEmptyByPrice(){
         System.out.println("Mời nhập khoảng giá");
         double price;
         String pr="";
@@ -96,14 +96,14 @@ public class HotelManager {
         return roomsEmpty;
     }
     public void showRoomsEmptyByPrice(){
-        ArrayList<Room> rooms = roomsEmpty();
+        ArrayList<Room> rooms = searchRoomsEmptyByPrice();
         if(rooms.size()==0){
             System.err.println("xin lỗi không có phòng trống trong khoảng giá này");
         }
         else {
             for (Room r:rooms
                  ) {
-                System.out.println(showRoom(r));
+                System.out.println(showRoomInformation(r));
             }
         }
     }
@@ -116,7 +116,7 @@ public class HotelManager {
         else {
             for (Room r:listRoom
                  ) {
-                System.out.println(showRoom(r));
+                System.out.println(showRoomInformation(r));
             }
         }
 
@@ -157,8 +157,7 @@ public class HotelManager {
 
 
     //menuroom
-//
-    public String showRoom(Room room){
+    public String showRoomInformation(Room room){
         String empty = room.isEmpty()?", Còn trống":", Đã có người thuê";
         String show =  "Phòng ID: "+room.getId()+" ,Giá: "+room.getPrice()+" vnđ"+ empty;
             return show+"\n-------------------------------";
@@ -238,7 +237,7 @@ public class HotelManager {
     }
 
     // thiết lập tạo khách hàng
-    public String enterNameOfRenter(){
+    public String createNameOfRenter(){
         System.out.println("Mời nhập tên khách hàng");
         String nameOfRenter = scanner.nextLine();
         System.err.println(successNotify);
@@ -246,7 +245,7 @@ public class HotelManager {
         saveInvoiceList();
         return nameOfRenter;
     }
-    public String enterIDCardOfRenter(){
+    public String createIDCardOfRenter(){
         System.out.println("Mời nhập số chứng minh thư của khách hàng");
         String IDCardOfRenter = scanner.nextLine();
         System.err.println(successNotify);
@@ -254,7 +253,7 @@ public class HotelManager {
         saveInvoiceList();
         return IDCardOfRenter;
     }
-    public String enterNumberPhoneOfRenter(){
+    public String createNumberPhoneOfRenter(){
         System.out.println("Mời nhập số điện thoại của khách hàng");
         String numberPhoneOfRenter = scanner.nextLine();
         System.err.println(successNotify);
@@ -266,9 +265,9 @@ public class HotelManager {
     //thêm khách thuê
     private Renter createNewRenter(){
         Renter renter = new Renter();
-        renter.setName(enterNameOfRenter());
-        renter.setIdCard(enterIDCardOfRenter());
-        renter.setPhoneNumber(enterNumberPhoneOfRenter());
+        renter.setName(createNameOfRenter());
+        renter.setIdCard(createIDCardOfRenter());
+        renter.setPhoneNumber(createNumberPhoneOfRenter());
         return renter;
     }
     //thêm khách thuê vào hoá đơn
@@ -397,12 +396,6 @@ public class HotelManager {
                 "\nTổng tiền: "+price+
                 "\nNgày nhận phòng: "+formatDate(invoice.getDayStart())+", Ngày trả phòng: "+ formatDate(invoice.getDayEnd())+
                 "\n-------------------------------------------------";
-//        if(invoice.getPaid()){
-//            System.err.println(infor);
-//        }
-//        else {
-//            System.out.println(infor);
-
         return infor;
 
     }
@@ -513,6 +506,7 @@ public class HotelManager {
             return null;
         }
     }
+
     public void addService(Invoice invoice, Service service){
         ArrayList<Service> services = invoice.getServices();
         services.add(service);
@@ -572,13 +566,13 @@ public class HotelManager {
         }
         System.out.println("-------------Tổng doanh thu: "+totalRevenue+"vnđ-------------");
     }
-    private void saveInvoiceList(){
+    public void saveInvoiceList(){
        textFileFactory.saveFile(listInvoice,"listInvoice.txt");
     }
-    private void saveListRenter(){
+    public void saveListRenter(){
         textFileFactory.saveFile(listRenter,"listRenter.txt");
     }
-    private void saveListRoom(){
+    public void saveListRoom(){
         textFileFactory.saveFile(listRoom,"listRoom.txt");
     }
     public void resetData(){

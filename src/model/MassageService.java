@@ -17,6 +17,6 @@ public class MassageService implements Service {
 
     @Override
     public double getPrice() {
-        return 200;
+        return 200000;
     }
 }

@@ -11,8 +11,8 @@ public class AccountManager {
     private static Scanner scanner = new Scanner(System.in);
     private TextFileFactory textFileFactory = TextFileFactory.getINSTANCE();
     private CheckInput checkInput = CheckInput.getINSTANCE();
-    public  Account account;
-    public   ArrayList<Account> listAccount = textFileFactory.readerFile("account.txt");
+    private   Account account;
+    private   ArrayList<Account> listAccount = textFileFactory.readerFile("account.txt");
     private String accountError = "Tài khoản hoặc mật khẩu phải từ 6-12 ký tự chữ hoặc số không được chứa khoảng trắng hay ký tự đặc biệt, mời nhập lại!";
     private String emailError = "Nhập sai định dạng email mời nhập lại VD: anhcongdeptrai@gmail.com";
 
@@ -46,7 +46,7 @@ public class AccountManager {
 
     }
 
-    public String enterAccountPassword(){
+    public String createAccountPassword(){
         System.out.println("Mời nhập mật khẩu ");
         String accountPassword;
         while (!checkInput.checkAccountNamePassword(accountPassword = scanner.nextLine())){
@@ -77,7 +77,7 @@ public class AccountManager {
         if(accountName!=null){
             String accountEmail = createAccountEmail();
             if(accountEmail!=null){
-                account.setAccountPassword(enterAccountPassword());
+                account.setAccountPassword(createAccountPassword());
                 account.setAccountName(accountName);
                 account.setAccountEmail(accountEmail);
                 listAccount.add(account);
@@ -105,7 +105,7 @@ public class AccountManager {
     }
     public boolean login(){
         String accountName = loginAccountName();
-        String accountPassword = enterAccountPassword();
+        String accountPassword = createAccountPassword();
         for (Account account: listAccount
         ) {
             if(account.getAccountName().equals(accountName)&&account.getAccountPassword().equals(accountPassword)){
@@ -116,6 +116,9 @@ public class AccountManager {
         return false;
     }
 
+    public Account getAccount() {
+        return account;
+    }
     public void passwordRetrieval(){
         System.err.println("Mời nhập lần lượt tên tài khoản và email");
         String accountName = loginAccountName();

@@ -8,18 +8,10 @@ import model.MudBathService;
 import model.Invoice;
 import model.Renter;
 import model.Room;
-import storage.TextFileFactory;
 
 import java.util.Scanner;
 
 public class Client {
-    static final AccountManager accountManager = AccountManager.getINSTANCE();
-    static final HotelManager hotelManager = HotelManager.getINSTANCE();
-    static TextFileFactory textFileFactory = TextFileFactory.getINSTANCE();
-    static CheckInput checkInput = CheckInput.getINSTANCE();
-    static  Scanner scanner = new Scanner(System.in);
-    static String errorInputOption = "---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------";
-    static String intError = "Mời nhập kiểu số";
 
     public static void main(String[] args) {
            loginMenu();
@@ -31,13 +23,10 @@ public class Client {
 
 
 
+
+
     }
-
-
-
-
-
-     static void loginMenu() {
+    static void loginMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("-----------------Chào mừng bạn đến với khách sạn Thành Công-----------------");
         while (true){
@@ -142,19 +131,17 @@ public class Client {
             choose = scanner.nextLine();
             switch (choose){
                 case "1":
-                    accountManager.account.setAccountPassword(accountManager.enterAccountPassword());
-                    saveAccount();
-                    System.err.println("thiết lập thành công");
+                    accountManager.getAccount().setAccountPassword(accountManager.createAccountPassword());
+                    accountManager.saveAccount();
                     break;
                 case "2":
-                    accountManager.account.setAccountEmail(accountManager.createAccountEmail());
-                    saveAccount();
-                    System.err.println("thiết lập thành công");
+                    accountManager.getAccount().setAccountEmail(accountManager.createAccountEmail());
+                    accountManager.saveAccount();
                     break;
                 case "3":
                     break;
                 default:
-                    System.err.println("---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------");
+                    System.err.println(errorInputOption);
 
             }
         }while (!choose.equals("3"));
@@ -236,13 +223,13 @@ public class Client {
                 choose = scanner.nextLine();
                 switch (choose){
                     case "1":
-                        renter.setName(hotelManager.enterNameOfRenter());
+                        renter.setName(hotelManager.createNameOfRenter());
                         break;
                     case "2":
-                        renter.setPhoneNumber(hotelManager.enterNumberPhoneOfRenter());
+                        renter.setPhoneNumber(hotelManager.createNumberPhoneOfRenter());
                         break;
                     case "3":
-                        renter.setIdCard(hotelManager.enterIDCardOfRenter());
+                        renter.setIdCard(hotelManager.createIDCardOfRenter());
                         break;
                     case "4":
                         break;
@@ -250,7 +237,7 @@ public class Client {
                         System.err.println(errorInputOption);
                         break;
                 }
-                saveInvoiceList();
+                hotelManager.saveInvoiceList();
             }
             while (!choose.equals("4"));
         }
@@ -289,7 +276,7 @@ public class Client {
             if(index<=invoice.getServices().size()){
                 invoice.getServices().remove(index-1);
                 System.err.println("Đã xoá dịch vụ thành công");
-                saveInvoiceList();
+                hotelManager.saveInvoiceList();
             }
             else {
                 System.err.println("Nhập sai vị trí dịch vụ");
@@ -299,7 +286,6 @@ public class Client {
         else {
             System.err.println("Không thể xoá vì chưa có dịch vụ nào");
         }
-
     }
     static void addServiceToInvoice(Invoice invoice){
         String choose;
@@ -311,11 +297,11 @@ public class Client {
             switch (choose){
                 case "1":
                     hotelManager.addService(invoice, MassageService.getINSTANCE());
-                    saveInvoiceList();
+                    hotelManager.saveInvoiceList();
                     break;
                 case "2":
                     hotelManager.addService(invoice, MudBathService.getINSTANCE());
-                    saveInvoiceList();
+                    hotelManager.saveInvoiceList();
                     break;
                 case "3":
                     break;
@@ -337,7 +323,7 @@ public class Client {
                 choose = scanner.nextLine();
                 switch (choose) {
                     case "1":
-                        hotelManager.showRoom(room);
+                        hotelManager.showRoomInformation(room);
                         break;
                     case "2":
                         settingRoomMenu(room);
@@ -377,10 +363,10 @@ public class Client {
             }
         }while ((!choose.equals("3")));
     }
-    static void saveInvoiceList(){
-        textFileFactory.saveFile(hotelManager.listInvoice,"listInvoice.txt");
-    }
-    static void saveAccount(){
-        textFileFactory.saveFile(accountManager.listAccount,"account.txt");
-    }
+    static final AccountManager accountManager = AccountManager.getINSTANCE();
+    static final HotelManager hotelManager = HotelManager.getINSTANCE();
+    static CheckInput checkInput = CheckInput.getINSTANCE();
+    static Scanner scanner = new Scanner(System.in);
+    static String errorInputOption = "---------------Bạn nhập sai tuỳ chọn, mời nhập lại!!!---------------";
+    static String intError = "Mời nhập kiểu số";
 }

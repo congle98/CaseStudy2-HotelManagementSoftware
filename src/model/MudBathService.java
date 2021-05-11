@@ -17,6 +17,6 @@ public class MudBathService implements Service {
 
     @Override
     public double getPrice() {
-        return 100;
+        return 150000;
     }
 }
