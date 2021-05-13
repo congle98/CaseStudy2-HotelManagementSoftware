@@ -24,7 +24,6 @@ public class Client {
 
 
 
-
     }
     static void loginMenu() {
         Scanner scanner = new Scanner(System.in);
@@ -153,7 +152,7 @@ public class Client {
                 System.out.println("1.Thay đổi phòng");
                 System.out.println("2.Thay đổi thông tin khách hàng");
                 System.out.println("3.Quản lý dịch vụ");
-                System.out.println("4.Thoát");
+                System.out.println("4.Thoát ra ngoài");
                 choose= scanner.nextLine();
                 switch (choose){
                     case "1":
@@ -185,7 +184,7 @@ public class Client {
                 System.out.println("1.Xem thông tin hoá đơn");
                 System.out.println("2.Thanh toán hoá đơn");
                 System.out.println("3.Chỉnh sửa hoá đơn");
-                System.out.println("4.Thoát");
+                System.out.println("4.Thoát ra ngoài");
                 choose= scanner.nextLine();
                 switch (choose){
                     case "1":
@@ -216,10 +215,10 @@ public class Client {
         if((renter=hotelManager.getRenterByIndex(invoice))!=null){
             String choose;
             do {
-                System.out.println("1. Thay đổi tên khách hàng");
-                System.out.println("2. Thay đổi số điện thoại của khách hàng");
-                System.out.println("3. Thay đổi chứng minh thư của khách hàng");
-                System.out.println("4. Thoát");
+                System.out.println("1.Thay đổi tên khách hàng");
+                System.out.println("2.Thay đổi số điện thoại của khách hàng");
+                System.out.println("3.Thay đổi chứng minh thư của khách hàng");
+                System.out.println("4.Thoát ra ngoài");
                 choose = scanner.nextLine();
                 switch (choose){
                     case "1":
@@ -290,18 +289,16 @@ public class Client {
     static void addServiceToInvoice(Invoice invoice){
         String choose;
         do {
-            System.out.println("Nhấn 1 để thêm dịch vụ massage");
-            System.out.println("Nhấn 2 để thêm dịch vụ tắm bùn");
-            System.out.println("Nhấn 3 để thoát ra ngoài");
+            System.out.println("1.Thêm dịch vụ massage");
+            System.out.println("2.Thêm dịch vụ tắm bùn");
+            System.out.println("3.Thoát ra ngoài");
             choose = scanner.nextLine();
             switch (choose){
                 case "1":
                     hotelManager.addService(invoice, MassageService.getINSTANCE());
-                    hotelManager.saveInvoiceList();
                     break;
                 case "2":
                     hotelManager.addService(invoice, MudBathService.getINSTANCE());
-                    hotelManager.saveInvoiceList();
                     break;
                 case "3":
                     break;
@@ -319,7 +316,7 @@ public class Client {
                 System.out.println("1.Xem thông tin phòng");
                 System.out.println("2.Thay đổi thông tin phòng");
                 System.out.println("3.Xoá phòng");
-                System.out.println("4.Thoát");
+                System.out.println("4.Thoát ra ngoài");
                 choose = scanner.nextLine();
                 switch (choose) {
                     case "1":

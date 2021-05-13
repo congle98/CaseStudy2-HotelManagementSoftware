@@ -73,7 +73,7 @@ public class HotelManager {
         listRoom.add(room);
         sortByPrice(listRoom);
         saveListRoom();
-        System.out.println(successNotify);
+        System.err.println(successNotify);
     }
 
     // lấy ra các phòng trống, sắp xếp và hiển thị theo giá
@@ -190,6 +190,7 @@ public class HotelManager {
         }
     }
 
+    //
     public void removeRoom(Room room){
         listRoom.remove(room);
         System.out.println("Đã xoá phòng thành công");
@@ -491,9 +492,8 @@ public class HotelManager {
         if(!check){
             System.err.println("Xin lỗi quý khách phòng không tồn tại hoặc đã có người thuê");
         }
+        else System.err.println(successNotify);
     }
-
-
     public Renter getRenterByIndex(Invoice invoice){
         System.out.println("Mời vị trí của khác hàng cần thay đổi thông tin");
         int index = Integer.parseInt(scanner.nextLine());
@@ -511,6 +511,7 @@ public class HotelManager {
         ArrayList<Service> services = invoice.getServices();
         services.add(service);
         System.err.println(successNotify);
+        saveInvoiceList();
     }
 
     public void showRevenueMenu(){
